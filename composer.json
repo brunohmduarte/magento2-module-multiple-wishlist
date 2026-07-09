@@ -1,0 +1,20 @@
+{
+    "name": "brunoduarte/module-multiple-wishlist",
+    "description": "Módulo para Magento 2 que permite a criação de multiplas lista de desejos.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "require": {
+        "php": "~7.4.0||~8.1.0||~8.2.0"
+    },
+    "license": [
+        "private"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "BrunoDuarte\\MultipleWishlist\\": ""
+        }
+    }
+}
