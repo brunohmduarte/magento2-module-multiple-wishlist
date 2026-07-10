@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <multiple_wishlist>
+            <general>
+                <enabled>0</enabled>
+                <title>Multiple Wishlist</title>
+                <available_customer_groups>1,2,3</available_customer_groups>
+                <wishlist_delete>0</wishlist_delete>
+            </general>
+            <customer>
+                <limit_max_wishlist></limit_max_wishlist>
+                <maximum_items_wishlist></maximum_items_wishlist>
+            </customer>
+        </multiple_wishlist>
+    </default>
+</config>
