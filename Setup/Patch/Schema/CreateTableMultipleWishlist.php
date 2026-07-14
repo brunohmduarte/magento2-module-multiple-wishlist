@@ -11,7 +11,7 @@ use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
 class CreateTableMultipleWishlist implements SchemaPatchInterface, PatchRevertableInterface
 {
-    public const TABLE_WISHLIST = 'multiplewishlist';
+    public const TABLE_WISHLIST = 'multiple_wishlist';
 
     /**
      * @var ModuleDataSetupInterface
@@ -34,10 +34,12 @@ class CreateTableMultipleWishlist implements SchemaPatchInterface, PatchRevertab
         $installer = $this->moduleDataSetup;
         $installer->startSetup();
 
+        $connection = $installer->getConnection();
+
         // Create the wishlist table
         if (!$installer->tableExists(self::TABLE_WISHLIST)) {
             // Create the wishlist table
-            $table = $installer->getConnection()->newTable(
+            $table = $connection->newTable(
                 $installer->getTable(self::TABLE_WISHLIST)
             )->addColumn(
                 'wishlist_id',
@@ -63,11 +65,29 @@ class CreateTableMultipleWishlist implements SchemaPatchInterface, PatchRevertab
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
+            )->addColumn(
+                'updated_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Update Time'
             )->setComment(
                 'Multiple Wishlist Table'
             );
-            $installer->getConnection()->createTable($table);
+
+            // Adding foreign key
+            $table->addForeignKey(
+                'FK_MULTIPLE_WISHLIST_CUSTOMER_ENTITY',
+                'customer_id',
+                'customer_entity',
+                'entity_id',
+                Table::ACTION_CASCADE
+            );
+
+            $connection->createTable($table);
         }
+
+        $installer->endSetup();
     }
 
     /**

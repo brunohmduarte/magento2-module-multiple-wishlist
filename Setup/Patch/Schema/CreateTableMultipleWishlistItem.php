@@ -4,6 +4,7 @@ declare(strict_types= 1);
 
 namespace BrunoDuarte\MultipleWishlist\Setup\Patch\Schema;
 
+use BrunoDuarte\MultipleWishlist\Setup\Patch\Schema\CreateTableMultipleWishlist;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -11,7 +12,7 @@ use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
 class CreateTableMultipleWishlistItem implements SchemaPatchInterface, PatchRevertableInterface
 {
-    public const TABLE_WISHLIST_ITEM = 'multiplewishlist_item';
+    public const TABLE_WISHLIST_ITEM = 'multiple_wishlist_item';
 
     /**
      * @var ModuleDataSetupInterface
@@ -34,9 +35,11 @@ class CreateTableMultipleWishlistItem implements SchemaPatchInterface, PatchReve
         $installer = $this->moduleDataSetup;
         $installer->startSetup();
 
+        $connection = $installer->getConnection();
+
         // Create the wishlist item table
         if (!$installer->tableExists(self::TABLE_WISHLIST_ITEM)) {
-            $table = $installer->getConnection()->newTable(
+            $table = $connection->newTable(
                 $installer->getTable(self::TABLE_WISHLIST_ITEM)
             )->addColumn(
                 'wishlist_item_id',
@@ -54,14 +57,14 @@ class CreateTableMultipleWishlistItem implements SchemaPatchInterface, PatchReve
                 'customer_id',
                 Table::TYPE_INTEGER,
                 null,
-                ['nullable'=> true, 'default' => null],
-                ''
+                ['nullable'=> false, 'unsigned' => true],
+                'Customer ID'
             )->addColumn(
-                '',
+                'quantity',
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false],
-                ''
+                'Quantity items'
             )->addColumn(
                 'product_id',
                 Table::TYPE_INTEGER,
@@ -69,18 +72,46 @@ class CreateTableMultipleWishlistItem implements SchemaPatchInterface, PatchReve
                 ['unsigned' => true, 'nullable' => false],
                 'Product ID'
             )->addColumn(
-                'added_at',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
-                'Added Time'
+                'Creation Time'
+            )->addColumn(
+                'updated_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Update Time'
             )->setComment(
                 'Multiple Wishlist Item Table'
             );
 
-            $installer->getConnection()->createTable($table);
-            $installer->endSetup();
+            // Adding foreign keys
+            $table->addForeignKey(
+                'FK_MULTIPLE_WISHLIST_ITEM_MULTIPLE_WISHLIST',
+                'wishlist_id',
+                $installer->getTable(CreateTableMultipleWishlist::TABLE_WISHLIST),
+                'wishlist_id',
+                Table::ACTION_CASCADE
+            )->addForeignKey(
+                'FK_MULTIPLE_WISHLIST_ITEM_CUSTOMER_ENTITY',
+                'customer_id',
+                $installer->getTable('customer_entity'),
+                'entity_id',
+                Table::ACTION_CASCADE
+            )->addForeignKey(
+                'FK_MULTIPLE_WISHLIST_ITEM_CATALOG_PRODUCT_ENTITY',
+                'product_id',
+                $installer->getTable('catalog_product_entity'),
+                'entity_id',
+                Table::ACTION_CASCADE
+            );
+
+            $connection->createTable($table);
         }
+
+        $installer->endSetup();
     }
 
     /**
@@ -88,7 +119,9 @@ class CreateTableMultipleWishlistItem implements SchemaPatchInterface, PatchReve
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            CreateTableMultipleWishlist::class
+        ];
     }
 
     /**
