@@ -44,4 +44,13 @@ class Data extends AbstractHelper
             )
         );
     }
+
+    public function getMaxQtyItemsByList(?int $storeId = null): int
+    {
+        return (int) $this->scopeConfig->getValue(
+            'multiple_wishlist/customer/maximum_items_wishlist',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
 }
