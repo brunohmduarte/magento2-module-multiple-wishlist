@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace BrunoDuarte\MultipleWishlist\Observer\Cart;
 
-use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistItemRepositoryInterface;
+// use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistItemRepositoryInterface;
 use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistInterface;
 use BrunoDuarte\MultipleWishlist\Model\MultipleWishlistItem;
 use BrunoDuarte\MultipleWishlist\Model\MultipleWishlistItemFactory;
+use BrunoDuarte\MultipleWishlist\Model\MultipleWishlistItemRepository;
 use BrunoDuarte\MultipleWishlist\Helper\Data as HelperModule;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
@@ -17,14 +18,14 @@ use Psr\Log\LoggerInterface;
 
 class AddItemsToList implements \Magento\Framework\Event\ObserverInterface
 {
-    private MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository;
+    private MultipleWishlistItemRepository $multipleWishlistItemRepository;
     private MultipleWishlistItemFactory $multipleWishlistItemFactory;
     private HelperModule $helperModule;
     private ManagerInterface $messageManager;
     private LoggerInterface $logger;
 
     public function __construct(
-        MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository,
+        MultipleWishlistItemRepository $multipleWishlistItemRepository,
         MultipleWishlistItemFactory $multipleWishlistItemFactory,
         HelperModule $helperModule,
         ManagerInterface $messageManager,
@@ -67,7 +68,7 @@ class AddItemsToList implements \Magento\Framework\Event\ObserverInterface
                 ->setWishlistId($multipleWishlist->getId());
 
             $multipleWishlistItem = $this->multipleWishlistItemRepository->save($multipleWishlistItem);
-            
+
             $successMessage = __(
                 'Created item with ID %1 to wishlist with %2',
                 $multipleWishlistItem->getId(),
