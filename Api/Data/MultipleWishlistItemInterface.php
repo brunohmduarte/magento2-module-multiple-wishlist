@@ -12,16 +12,13 @@ interface MultipleWishlistItemInterface
     public const QUANTITY = 'quantity';
     public const PRODUCT_ID = 'product_id';
 
-    /**
-     * @return int|null
-     */
-    public function getEntityId(): ?int;
+    public function getEntityId();
 
     /**
      * @param int $entityId
-     * @return self
+     * @return $this
      */
-    public function setEntityId(int $entityId): void;
+    public function setEntityId(int $entityId);
 
     /**
      * @return int|null

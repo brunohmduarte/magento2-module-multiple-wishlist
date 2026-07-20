@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @var \BrunoDuarte\MultipleWishlist\Block\Listing\Listing $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \BrunoDuarte\MultipleWishlist\Helper\Data $helperModule
+ */
+
+$multiplesWishlist = $block->getCustomerMultipleWishlist();
+$helperModule = $this->helper(\BrunoDuarte\MultipleWishlist\Helper\Data::class);
+?>
+<?php if ($multiplesWishlist !== null) : ?>
+    <div class="table-wrapper">
+        <table class="data table">
+            <thead>
+                <tr>
+                    <th scope="col" class="col"><?= __('List ID #') ?></th>
+                    <th scope="col" class="col"><?= __('Title') ?></th>
+                    <th scope="col" class="col"><?= __('Is Active') ?></th>
+                    <th scope="col" class="col"><?= __('Action') ?></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($multiplesWishlist as $list) : ?>
+                    <tr class="col">
+                        <td class="col"><?= $list->getId() ?></td>
+                        <td class="col"><?= $list->getTitle() ?></td>
+                        <td class="col"><?= __($block->formatStatus($list->getIsActive())) ?></td>
+                        <td class="col">
+                            <a class="action view" href="<?= $block->getViewUrl($list->getId()) ?>">
+                                <?= __('View') ?>
+                            </a>
+
+                            <?php if ($list->getIsActive()) : ?>
+                                <a class="action view" href="<?= $block->getOrderUrl($list->getId()) ?>">
+                                    <?= __('Order') ?>
+                                </a>
+                            <?php endif; ?>
+
+                            <?php if ($helperModule->canDeleteLists()) : ?>
+                                <a class="action view" href="<?= $block->getDeleteUrl($list->getId()) ?>">
+                                    <?= __('Delete') ?>
+                                </a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?php if ($block->getPagerHtml()) : ?>
+        <div class="toolbar bottom">
+            <?= $block->getPagerHtml(); ?>
+        </div>
+    <?php endif ?>
+<?php else : ?>
+    <div class="message info empty">
+        <span><?= __('You have not lists.') ?></span>
+    </div>
+<?php endif; ?>

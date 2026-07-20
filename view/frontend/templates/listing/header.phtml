@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \BrunoDuarte\MultipleWishlist\ViewModel\Listing\Header $viewModel
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$viewModel = $block->getData('multiple_wishlist_header');
+?>
+<div class="multiple-wishlist-header" style="height: 4rem">
+    <div class="primary" style="float: right">
+        <a class="action save primary" href="<?= $viewModel->getCreateUrl() ?>">
+            <span><?= __('Create') ?></span>
+        </a>
+    </div>
+</div>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @category  BrunoDuarte
+ * @package   BrunoDuarte_MultipleWishlist
+ * @copyright Copyright (c) 2026 BrunoDuarte
+ */
 
 declare(strict_types=1);
 
@@ -7,6 +12,11 @@ namespace BrunoDuarte\MultipleWishlist\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Data helper class
+ *
+ * @package BrunoDuarte\MultipleWishlist\Helper
+ */
 class Data extends AbstractHelper
 {
     public const MODULE_REGISTRATION = 'Bistwobis_MultipleWishlist';
@@ -49,6 +59,15 @@ class Data extends AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             'multiple_wishlist/customer/maximum_items_wishlist',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getMaxQtyListsByCustomer(?int $storeId = null): int
+    {
+        return (int) $this->scopeConfig->getValue(
+            'multiple_wishlist/customer/limit_max_wishlist',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );

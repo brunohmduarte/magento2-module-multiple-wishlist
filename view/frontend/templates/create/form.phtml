@@ -1,0 +1,67 @@
+<?php
+/**
+ * @category  BrunoDuarte
+ * @package   BrunoDuarte_MultipleWishlist
+ * @copyright Copyright (c) 2026 BrunoDuarte
+ * 
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \BrunoDuarte\MultipleWishlist\ViewModel\Create\Form $viewModel
+ */
+
+$viewModel = $block->getData('multiple_wishlist_form');
+$maxListsAllowed = $viewModel->getMaxListsAllowed();
+$qtyCustomerLists = $viewModel->getQtyCustomerLists();
+?>
+<div>
+    <form class="form" action="<?= $viewModel->getSaveUrl() ?>" method="POST" style="width: 50%;" data-mage-init='{"validation": {"rules": {"field-1": {"required":true}}}}'>
+        <?= $block->getBlockHtml('formkey') ?>
+
+        <fieldset class="fieldset info">
+            <legend class="legend">
+                <span><?= __('Add New List') ?></span>
+            </legend>
+
+            <br />
+
+            <div class="field note no-label">
+                <?php if ($maxListsAllowed) : ?>
+                    <span>
+                        <?= __('You have %1 lists, the maximum allowed lists per customer is %2.', $qtyCustomerLists, $maxListsAllowed) ?>
+                    </span>
+                <?php else : ?>
+                    <span>
+                        <?= __('You have %1 lists.', $qtyCustomerLists) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+
+            <div class="field required">
+                <label class="label" for="title">
+                    <span><?= __('Title') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" name="multiple_wishlist[title]" title="<?= __('Title') ?>" class="input-text" data-validate='{"required":true}' data-msg-required="<?= __('The field title is required.') ?>" required />
+                </div>
+            </div>
+            <div class="field required">
+                <label class="label">
+                    <span><?= __('Status') ?></span>
+                </label>
+                <div class="control">
+                    <select name="multiple_wishlist[is_active]" title="<?= __('Status') ?>">
+                        <option value="0"><?= __('Inactive') ?></option>
+                        <option value="1" selected><?= __('Active') ?></option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" class="action save primary" title="<?= __('Save Buy List') ?>" style="margin: 0">
+                    <span><?= __('Save') ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
