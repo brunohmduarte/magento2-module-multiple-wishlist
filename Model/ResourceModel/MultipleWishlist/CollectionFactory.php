@@ -10,7 +10,6 @@ declare(strict_types= 1);
 namespace BrunoDuarte\MultipleWishlist\Model\ResourceModel\MultipleWishlist;
 
 use Magento\Framework\ObjectManagerInterface;
-use BrunoDuarte\MultipleWishlist\Model\MultipleWishlist;
 
 /**
  * Multiple Wishlist Collection factory
@@ -38,10 +37,10 @@ class CollectionFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return MultipleWishlist
+     * @return Collection
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create(MultipleWishlist::class, $data);
+        return $this->objectManager->create(Collection::class, $data);
     }
 }

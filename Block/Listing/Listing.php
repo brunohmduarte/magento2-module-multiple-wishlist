@@ -65,8 +65,12 @@ class Listing extends Template
         $pageSize = ($this->getRequest()->getParam('limit')) ?
             $this->getRequest()->getParam('limit') : self::QTY_DEFAULT;
 
+        /** @var MultipleWishlistCollection $wishlistCollection */
         // @phpstan-ignore-next-line
-        $wishlistCollection = $this->multipleWishlistCollectionFactory->create()->addFieldToFilter('store_id', $this->getStoreId())
+        $wishlistCollection = $this->multipleWishlistCollectionFactory->create();
+
+        $wishlistCollection
+            //->addFieldToFilter('store_id', $this->getStoreId())
             ->addFieldToFilter('customer_id', $this->getCustomer()->getId())
             ->setPageSize($pageSize)
             ->setCurPage($page);
