@@ -9,15 +9,15 @@ declare(strict_types=1);
 
 namespace BrunoDuarte\MultipleWishlist\Controller\Page;
 
-use Magento\Framework\App\ActionInterface;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use BrunoDuarte\MultipleWishlist\Helper\Data as HelperModule;
-use Magento\Customer\Model\SessionFactory;
-use Magento\Framework\Message\ManagerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Abstract AbstractPage
@@ -29,7 +29,7 @@ abstract class AbstractPage implements ActionInterface
     protected PageFactory $resultPageFactory;
     protected RedirectFactory $resultRedirectFactory;
     protected HelperModule $helperModule;
-    protected SessionFactory $sessionFactory;
+    protected Session $session;
     protected ManagerInterface $messageManager;
 
     /**
@@ -38,33 +38,33 @@ abstract class AbstractPage implements ActionInterface
      * @param PageFactory $resultPageFactory
      * @param RedirectFactory $resultRedirectFactory
      * @param HelperModule $helperModule
-     * @param SessionFactory $sessionFactory
+     * @param Session $session
      * @param ManagerInterface $messageManager
      */
     public function __construct(
         PageFactory $resultPageFactory,
         RedirectFactory $resultRedirectFactory,
         HelperModule $helperModule,
-        SessionFactory $sessionFactory,
+        Session $session,
         ManagerInterface $messageManager
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->helperModule = $helperModule;
-        $this->sessionFactory = $sessionFactory;
+        $this->session = $session;
         $this->messageManager = $messageManager;
     }
 
-    protected function init(): void
+    protected function checkPermissions()
     {
         if (!$this->helperModule->isModuleEnable()) {
-            throw new AuthorizationException(__('The multiple wishlist module is disabled.'));
+            $this->messageManager->addErrorMessage(__("The multiple wishlist module is disabled."));
+            return $this->resultRedirectFactory->create()->setPath('customer/account/');
         }
 
-        $session = $this->sessionFactory->create();
-
-        if (!$session->isLoggedIn()) {
-            throw new SessionException(__('Customer is not logged in'));
+        if (!$this->session->isLoggedIn()) {
+            $this->messageManager->addErrorMessage(__('Customer is not logged in'));
+            return $this->resultRedirectFactory->create()->setPath('customer/account/login');
         }
     }
 

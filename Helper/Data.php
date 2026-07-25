@@ -19,7 +19,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Data extends AbstractHelper
 {
-    public const MODULE_REGISTRATION = 'Bistwobis_MultipleWishlist';
+    public const MODULE_REGISTRATION = 'BrunoDuarte_MultipleWishlist';
 
     private const MULTIPLE_WISHLIST_MODULE_ENABLE = 'multiple_wishlist/general/enabled';
     private const MULTIPLE_WISHLIST_MODULE_TITLE = 'multiple_wishlist/general/title';

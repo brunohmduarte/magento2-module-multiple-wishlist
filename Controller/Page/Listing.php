@@ -21,21 +21,10 @@ class Listing extends AbstractPage
 {
     public function execute(): ResultInterface
     {
-        try {
-            $this->init();
+        $this->checkPermissions();
 
-            $result = $this->resultPageFactory->create();
-            $result->getConfig()->getTitle()->set(__('My Multiple Wishlists')->render());
-
-        } catch (SessionException $exception) {
-            $this->messageManager->addErrorMessage($exception->getMessage());
-            $result = $this->resultRedirectFactory->create();
-            $result->setPath('customer/account/login/')->setHttpResponseCode(301);
-        } catch (\Exception $exception) {
-            $this->messageManager->addErrorMessage($exception->getMessage());
-            $result = $this->resultRedirectFactory->create();
-            $result->setPath('customer/account/')->setHttpResponseCode(301);
-        }
+        $result = $this->resultPageFactory->create();
+        $result->getConfig()->getTitle()->set(__('My Multiple Wishlists'));
 
         return $result;
     }

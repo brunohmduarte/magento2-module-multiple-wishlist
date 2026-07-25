@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Bistwobis\MultipleWishlist\Controller\Page;
+namespace BrunoDuarte\MultipleWishlist\Controller\Page;
 
 use BrunoDuarte\MultipleWishlist\Controller\Page\AbstractPage;
 use Magento\Framework\Controller\ResultInterface;
