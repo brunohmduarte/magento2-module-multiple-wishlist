@@ -23,7 +23,8 @@ class Create extends AbstractPage
     public function execute(): ResultInterface
     {
         try {
-            $this->init();
+            $this->checkPermissions();
+
             $result = $this->resultPageFactory->create();
             $result->getConfig()->getTitle()->set(__('Create Multiple Wishlists')->render());
         } catch (SessionException $exception) {

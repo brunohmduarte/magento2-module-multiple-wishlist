@@ -20,10 +20,10 @@ use Magento\Store\Model\ScopeInterface;
 class Data extends AbstractHelper
 {
     public const MODULE_REGISTRATION = 'BrunoDuarte_MultipleWishlist';
-
     private const MULTIPLE_WISHLIST_MODULE_ENABLE = 'multiple_wishlist/general/enabled';
     private const MULTIPLE_WISHLIST_MODULE_TITLE = 'multiple_wishlist/general/title';
     private const MULTIPLE_WISHLIST_AVAILABLE_CUSTOMER_GROUPS = 'multiple_wishlist/general/available_customer_groups';
+    private const DELETE_LISTS = 'multiple_wishlist/general/delete_lists';
 
     public function isModuleEnable(?int $storeId = null): bool
     {
@@ -72,4 +72,24 @@ class Data extends AbstractHelper
             $storeId
         );
     }
+
+    public function isCustomerGroupIdAvailable(?int $customerGroupId = null): bool
+    {
+        if ($customerGroupId === null) {
+            return false;
+        }
+
+        return in_array($customerGroupId, $this->getAvailableCustomerGroups());
+
+    }
+
+    public function canDeleteLists(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::DELETE_LISTS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
 }

@@ -90,7 +90,8 @@ abstract class AbstractPost implements ActionInterface
             );
         }
 
-        if (!$this->helperModule->isCustomerGroupIdAvailable((int) $session->getCustomer()->getGroupId())) {
+        $customerGroupId = (int) $session->getCustomer()->getGroupId();
+        if (!$this->helperModule->isCustomerGroupIdAvailable($customerGroupId)) {
             throw new LocalizedException(__('This customer is not available to multiple wishlists.'));
         }
     }

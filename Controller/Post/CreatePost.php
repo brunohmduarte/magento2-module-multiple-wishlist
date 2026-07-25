@@ -18,7 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class CreatePost
- * 
+ *
  * @package BrunoDuarte\MultipleWishlist\Controller\Post
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
