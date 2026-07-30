@@ -6,7 +6,7 @@ namespace BrunoDuarte\MultipleWishlist\Api\Data;
 
 interface MultipleWishlistInterface
 {
-    public const ID = 'entity_id';
+    public const ID = 'wishlist_id';
     public const CUSTOMER_ID = 'customer_id';
     public const TITLE = 'title';
     public const IS_ACTIVE = 'is_active';

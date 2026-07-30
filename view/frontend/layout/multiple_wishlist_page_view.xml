@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <body>
+        <referenceBlock name="sidebar.main.account_nav" remove="true" />
+
+        <referenceContainer name="sidebar.main">
+            <block class="BrunoDuarte\MultipleWishlist\Block\View\View"
+                name="brunoduarte.multiplewishlist.wishlist-all-link"
+                template="BrunoDuarte_MultipleWishlist::view/sidebar_menu.phtml"
+            />
+        </referenceContainer>
+
+        <referenceContainer name="content">
+            <block name="multiple.wishlist.header" template="BrunoDuarte_MultipleWishlist::view/header.phtml">
+                <arguments>
+                    <argument name="multiple_wishlist_header" xsi:type="object">BrunoDuarte\MultipleWishlist\ViewModel\View\Header</argument>
+                </arguments>
+            </block>
+
+            <block class="BrunoDuarte\MultipleWishlist\Block\Listing\Listing" name="multiple.wishlist.listing" template="BrunoDuarte_MultipleWishlist::listing/listing.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

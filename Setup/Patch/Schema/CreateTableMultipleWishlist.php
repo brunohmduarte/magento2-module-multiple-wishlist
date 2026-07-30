@@ -60,6 +60,12 @@ class CreateTableMultipleWishlist implements SchemaPatchInterface, PatchRevertab
                 ['nullable' => false],
                 'Wishlist title'
             )->addColumn(
+                'is_active',
+                Table::TYPE_INTEGER,
+                1,
+                ['unsigned' => true, 'nullable' => false],
+                'Wishlist status'
+            )->addColumn(
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,

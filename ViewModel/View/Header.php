@@ -2,28 +2,24 @@
 /**
  * @category BrunoDuarte
  * @package BrunoDuarte_MultipleWishlist
- * @copyright Copyright (c) 2026 BrunoDuarte
+ * @copyright 2026 BrunoDuarte
  */
 
 declare(strict_types=1);
 
-namespace BrunoDuarte\MultipleWishlist\ViewModel\Listing;
+namespace BrunoDuarte\MultipleWishlist\ViewModel\View;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * class Header
- *
- * @package BrunoDuarte\MultipleWishlist\ViewModel\Listing
- */
 class Header implements ArgumentInterface
 {
-    private UrlInterface $urlBuilder;
+    /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
 
     /**
-     * Header constructor.
-     *
      * @param UrlInterface $urlBuilder
      */
     public function __construct(UrlInterface $urlBuilder)
@@ -31,8 +27,9 @@ class Header implements ArgumentInterface
         $this->urlBuilder = $urlBuilder;
     }
 
-    public function getCreateUrl(): string
-    {
-        return $this->urlBuilder->getUrl('multiple_wishlist/page/create');
-    }
+    // public function getCreateUrl(): string
+    // {
+    //     return $this->urlBuilder->getUrl('multiple_wishlist/page/create');
+    // }
+
 }
