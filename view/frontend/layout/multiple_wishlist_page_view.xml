@@ -5,7 +5,8 @@
         <referenceBlock name="sidebar.main.account_nav" remove="true" />
 
         <referenceContainer name="sidebar.main">
-            <block class="BrunoDuarte\MultipleWishlist\Block\View\View"
+            <block
+                class="BrunoDuarte\MultipleWishlist\Block\View\View"
                 name="brunoduarte.multiplewishlist.wishlist-all-link"
                 template="BrunoDuarte_MultipleWishlist::view/sidebar_menu.phtml"
             />
@@ -18,7 +19,12 @@
                 </arguments>
             </block>
 
-            <block class="BrunoDuarte\MultipleWishlist\Block\Listing\Listing" name="multiple.wishlist.listing" template="BrunoDuarte_MultipleWishlist::listing/listing.phtml" cacheable="false"/>
+            <block
+                class="BrunoDuarte\MultipleWishlist\Block\View\WishlistItemsList"
+                name="multiple.wishlist.items.list"
+                template="BrunoDuarte_MultipleWishlist::view/WishlistItemsList.phtml"
+                cacheable="false"
+            />
         </referenceContainer>
     </body>
 </page>
