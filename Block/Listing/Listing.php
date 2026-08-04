@@ -62,6 +62,7 @@ class Listing extends Template
     {
         $page = ($this->getRequest()->getParam('p')) ?
             $this->getRequest()->getParam('p') : self::QTY_DEFAULT;
+            
         $pageSize = ($this->getRequest()->getParam('limit')) ?
             $this->getRequest()->getParam('limit') : self::QTY_DEFAULT;
 
