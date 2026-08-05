@@ -18,7 +18,8 @@ class View extends AbstractPage
         $this->checkPermissions();
 
         $page = $this->resultPageFactory->create();
-        $page->getConfig()->getTitle()->set(__('View wishlist items'));
+        // $page->getConfig()->getTitle()->set(__('View wishlist items'));
+        $page->getConfig()->getTitle()->unsetValue(); // Unset the default title
 
         return $page;
     }
