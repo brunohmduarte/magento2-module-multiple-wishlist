@@ -1,1 +1,64 @@
-<h1>My Wish List Items</h1>
+<?php
+/**
+ * @var \BrunoDuarte\MultipleWishlist\ViewModel\View\ItemsList $viewModel
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+
+$viewModel = $block->getData('multiple_wishlist_items_list');
+?>
+<div accesskey="" class="block block-wishlist">
+    <div class="table-wrapper">
+        <table class="data table">
+            <thead>
+                <tr>
+                    <th scope="col" class="col"><?= __('Product') ?></th>
+                    <th scope="col" class="col"><?= __('Name') ?></th>
+                    <th scope="col" class="col"><?= __('Price') ?></th>
+                    <th scope="col" class="col"><?= __('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($viewModel->getWishlistItems() as $item) : ?>
+                    <tr class="col">
+                        <td class="col">
+                            <img src="<?= $item['image'] ?>" alt="<?= $item['name'] ?>" style="width: 100px; height: 100px; object-fit: cover;" />
+                        </td>
+                        <td class="col">
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a href="<?= $item['product_url'] ?>"><?= $item['name'] ?></a>
+                                </strong>
+                                <span class="product-item-sku">SKU: <?= $item['sku'] ?></span>
+                            </div>
+                        </td>
+                        <td class="col">
+                            <span style="font-size:14px; line-height:100px; font-weight:500; color:black;"><?= $item['price'] ?></span>
+                        </td>
+                        <td class="col" style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
+                            <a class="action view" href="<?= $item['url_remove'] ?>">Remover</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr class="col">
+                    <td class="col">
+                        <img src="https://placehold.co/100" alt="Product Image" style="width: 100px; height: 100px; object-fit: cover;" />
+                    </td>
+                    <td class="col">
+                        <div class="product-item-details">
+                            <strong class="product-item-name">
+                                <a href="#">Camiseta Preta - Tamanho M</a>
+                            </strong>
+                            <span class="product-item-sku">SKU: 123456</span>
+                        </div>
+                    </td>
+                    <td class="col">
+                        <span style="font-size:14px; line-height:100px; font-weight:500; color:black;">R$ 59,90</span>
+                    </td>
+                    <td class="col" style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
+                        <a class="action view" href="#">Remover</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

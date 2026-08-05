@@ -20,11 +20,15 @@
             </block>
 
             <block
-                class="BrunoDuarte\MultipleWishlist\Block\View\WishlistItemsList"
+                class="Magento\Framework\View\Element\Template"
                 name="multiple.wishlist.items.list"
-                template="BrunoDuarte_MultipleWishlist::view/WishlistItemsList.phtml"
+                template="BrunoDuarte_MultipleWishlist::view/View.phtml"
                 cacheable="false"
-            />
+            >
+                <arguments>
+                    <argument name="multiple_wishlist_items_list" xsi:type="object">BrunoDuarte\MultipleWishlist\ViewModel\View\ItemsList</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
