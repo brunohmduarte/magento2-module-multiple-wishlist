@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BrunoDuarte\MultipleWishlist\Api;
 
-// use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistInterface;
+use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistItemInterface;
 
 interface MultipleWishlistItemRepositoryInterface
 {
-    // public function getById(int $multipleWishlistId): MultipleWishlistInterface;
+    public function getById(int $multipleWishlistId): MultipleWishlistItemInterface;
 
-    // public function save(MultipleWishlistInterface $multipleWishlist): MultipleWishlistInterface;
+    public function save(MultipleWishlistInterface $multipleWishlist): MultipleWishlistItemInterface;
 
     // public function delete(MultipleWishlistInterface $multipleWishlist): bool;
 
