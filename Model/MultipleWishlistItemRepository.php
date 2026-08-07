@@ -6,6 +6,8 @@ namespace BrunoDuarte\MultipleWishlist\Model;
 
 use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistItemRepositoryInterface;
 use BrunoDuarte\MultipleWishlist\Model\ResourceModel\MultipleWishlistItem as MultipleWishlistItemResourceModel;
+use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistItemInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class MultipleWishlistItemRepository implements MultipleWishlistItemRepositoryInterface
 {
@@ -20,12 +22,12 @@ class MultipleWishlistItemRepository implements MultipleWishlistItemRepositoryIn
         $this->resourceModelMultipleWishlistItem = $resourceModelMultipleWishlistItem;
     }
 
-    public function save(MultipleWishlistItem $multipleWishlistItem): MultipleWishlistItem
+    public function save(MultipleWishlistItemInterface $multipleWishlistItem): MultipleWishlistItemInterface
     {
         try {
             $this->resourceModelMultipleWishlistItem->save($multipleWishlistItem);
         } catch (\Exception $exception) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
+            throw new CouldNotSaveException(
                 __('Unable to save object. Error: %1', $exception->getMessage())
             );
         }

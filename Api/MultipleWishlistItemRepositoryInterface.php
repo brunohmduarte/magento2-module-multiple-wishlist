@@ -10,7 +10,7 @@ interface MultipleWishlistItemRepositoryInterface
 {
     public function getById(int $multipleWishlistId): MultipleWishlistItemInterface;
 
-    public function save(MultipleWishlistInterface $multipleWishlist): MultipleWishlistItemInterface;
+    public function save(MultipleWishlistItemInterface $multipleWishlistItem): MultipleWishlistItemInterface;
 
     // public function delete(MultipleWishlistInterface $multipleWishlist): bool;
 
