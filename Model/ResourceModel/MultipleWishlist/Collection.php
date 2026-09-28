@@ -14,4 +14,14 @@ class Collection extends AbstractCollection
     {
         $this->_init(MultipleWishlistModel::class, MultipleWishlistResourceModel::class);
     }
+     /**
+     * Get a multiple wishlist list active order by title.
+     *
+     * @return Collection
+     */
+    public function getMultipleWishlistList()
+    {
+        $wishlistActive = $this->addFieldToFilter('is_active', '1')->addOrder('title', 'asc');
+        return $wishlistActive;
+    }
 }

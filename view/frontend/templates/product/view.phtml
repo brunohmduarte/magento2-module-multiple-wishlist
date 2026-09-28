@@ -43,27 +43,77 @@
         }
     </style>
 
-    <div class="box-multiple-wishlist">
+    <div
+        class="box-multiple-wishlist"
+        data-bind="scope: multipleWishlist"
+    >
+        <h4 class="title"><?= $escaper->escapehtml(__('Adicione à sua lista de desejo')); ?></h4>
+
         <div class="fieldset">
             <div class="field">
-                <select class="input-field" id="" name="">
-                    <option value="">Selecione uma lista</option>
-                    <? foreach($block->getMultipleWishlistList() as $wishlist): ?>
-                        <option value="<?= $wishlist->getWishlistId() ?>"><?= $wishlist->getTitle() ?></option>
-                    <? endforeach; ?>
-                </select>
+                <select
+                    class="input-field"
+                    id="wishlist-select"
+                    data-bind="
+                        options: wishlist,
+                        optionsText: 'name',
+                        optionsValue: 'id',
+                        value: selectedWishlistId,
+                        optionsCaption: '<?= $escaper->escapeJs('Selecione uma lista') ?>'
+                    "
+                ></select>
+                <?php //foreach($block->getMultipleWishlistList() as $wishlist): ?>
+                    <!-- <option value="<?php //echo $wishlist->getWishlistId() ?>"><?php //echo $wishlist->getTitle() ?></option> -->
+                <?php //endforeach; ?>
             </div>
-            <button type="button" title="Adicionar à lista de desejo" class="action primary toMultipleWishlist" id="multiple-wishlist-addproduct-button">
-                <span>Adicionar à Lista de Desejo</span>
+
+            <button
+                type="button"
+                title="Adicionar à lista de desejo"
+                class="action primary"
+                data-bind="
+                    click: addToWishlist,
+                    enable: canAdd,
+                    css: {
+                        'loading': isLoading
+                    }
+                "
+            >
+                <span data-bind="text: buttonLabel"></span>
             </button>
         </div>
+
+        <!-- Success Message -->
+        <div
+            class="message success"
+            data-bind="
+                visible: successMessage,
+                text: successMessage
+            "
+        ></div>
+
+        <!-- Error Message -->
+        <div
+            class="message error"
+            data-bind="
+                visible: errorMessage,
+                text: errorMessage
+            "
+        ></div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#multiple-wishlist-addproduct-button').on('click', function() {
-                alert('Implementar a ação de Adicionar o Produto à Lista de Desejo.');
-            });
-        });
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                [data-bind='scope: multipleWishlist']": {
+                    "Brunoduarte_MultipleWishlist/js/product/multiple_wishlist": {
+                        "productId": <?= (int) $block->getProductId() ?>,
+                        "addUrl": "<?= $escaper->escapeUrl(
+                            $block->getUrl('multiple_wishlist/ajax/addProductToMultipleWishlist')
+                        ) ?>"
+                    }
+                }
+            }
+        }
     </script>
 <?php endif; ?>
