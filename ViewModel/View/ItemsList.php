@@ -12,6 +12,7 @@ namespace BrunoDuarte\MultipleWishlist\ViewModel\View;
 use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistRepositoryInterface;
 use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistItemRepositoryInterface;
 use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistItemInterface;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
@@ -46,23 +47,31 @@ class ItemsList implements ArgumentInterface
     private ManagerInterface $messageManager;
 
     /**
+     * @var ProductFactory
+     */
+    private ProductFactory $productFactory;
+
+    /**
      * ItemsList constructor.
      *
      * @param RequestInterface $request
      * @param MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository
      * @param MultipleWishlistRepositoryInterface $multipleWishlistRepository
      * @param ManagerInterface $messageManager
+     * @param ProductFactory $productFactory
      */
     public function __construct(
         RequestInterface $request,
         MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository,
         MultipleWishlistRepositoryInterface $multipleWishlistRepository,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        ProductFactory $productFactory
     ) {
         $this->request = $request;
         $this->multipleWishlistItemRepository = $multipleWishlistItemRepository;
         $this->multipleWishlistRepository = $multipleWishlistRepository;
         $this->messageManager = $messageManager;
+        $this->productFactory = $productFactory;
     }
 
     public function getWishlistId(): int
@@ -117,6 +126,15 @@ class ItemsList implements ArgumentInterface
             $wishlistItems = $this->multipleWishlistItemRepository->getById($this->getWishlistId());
             if (empty($wishlistItems)) {
                 return [];
+            }
+
+            $productId = (int) $wishlistItems->getProductId();
+            if (!empty($productId)) {
+                $product = $this->productFactory->create()->load($productId);
+                if (!$product->getId()) {
+                    throw new \InvalidArgumentException('Product not found for the wishlist item.');
+                }
+                $wishlistItems->setProduct($product->getData());
             }
 
             return $wishlistItems->getData();

@@ -41,39 +41,41 @@ $wishlistItems = $viewModel->getWishlistItems();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($wishlistItems as $item): ?>
+                    <!-- $wishlistItems está retornando um array, quando deveria retornar um objeto. -->
+                    <?php foreach ($wishlistItems as $product): ?>
                         <tr class="col">
                             <td class="col" width="15%">
-                                <img src="<?= $item['image'] ?>" alt="<?= $item['name'] ?>" style="width: 100px; height: 100px; object-fit: cover;" />
+                                <img src="<?= $product['product']['swatch_image'] ?>" alt="<?= $product['product']['name'] ?>" style="width: 100px; height: 100px; object-fit: cover;" />
                             </td>
                             <td class="col" width="60%">
                                 <div class="product-item-details">
                                     <strong class="product-item-name">
-                                        <a href="<?= $item['product_url'] ?>"><?= $item['name'] ?></a>
+                                        <a href="<?= $product['product']['product_url'] ?>"><?= $product['product']['name'] ?></a>
                                     </strong>
-                                    <span class="product-item-sku">SKU: <?= $item['sku'] ?></span>
+                                    <span class="product-item-sku">SKU: <?= $product['product']['sku'] ?></span>
                                 </div>
                             </td>
                             <td class="col" width="15%">
-                                <span style="font-size:14px; line-height:100px; font-weight:500; color:black;"><?= $item['price'] ?></span>
+                                <span style="font-size:14px; line-height:100px; font-weight:500; color:black;"><?= $product['product']['price'] ?></span>
                             </td>
                             <td class="col" width="10%" style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
-                                <a class="action view" href="<?= $item['url_remove'] ?>">Remover</a>
+                                <a class="action view" href="<?= $product['product']['url_remove'] ?>">Remover</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                        <tr class="col">
-                            <td class="col" colspan="4">
-                                <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">Total de itens: <?= count($viewModel->getWishlistItems()) ?></span>
-                            </td>
-                        </tr>
-                        <tr class="col">
-                            <td class="col" colspan="4">
-                                <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
-                                    A lista de desejos não possui itens. Adicione produtos à sua lista de desejos para visualizá-los aqui.
-                                </span>
-                            </td>
-                        </tr>
+
+                    <tr class="col">
+                        <td class="col" colspan="4">
+                            <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">Total de itens: <?= count($viewModel->getWishlistItems()) ?></span>
+                        </td>
+                    </tr>
+                    <tr class="col">
+                        <td class="col" colspan="4">
+                            <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
+                                A lista de desejos não possui itens. Adicione produtos à sua lista de desejos para visualizá-los aqui.
+                            </span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
