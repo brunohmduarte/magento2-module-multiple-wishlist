@@ -11,6 +11,7 @@ namespace BrunoDuarte\MultipleWishlist\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
+use NumberFormatter;
 
 /**
  * Data helper class
@@ -90,5 +91,20 @@ class Data extends AbstractHelper
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    protected function formatCurrency(float $amount, string $currencyCode = 'BRL', string $locale = 'pt_BR'): string
+    {
+        $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+        return $formatter->formatCurrency($amount, $currencyCode);
+    }
+
+    public function getPrice(float $price, $locale = 'pt_BR'): string
+    {
+        if (empty($price)) {
+            return '';
+        }
+
+        return $this->formatCurrency($price);
     }
 }

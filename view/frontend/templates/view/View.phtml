@@ -6,6 +6,8 @@
 
 $viewModel = $block->getData('multiple_wishlist_items_list');
 $wishlistItems = $viewModel->getWishlistItems();
+$dataHelper = $this->helper(\BrunoDuarte\MultipleWishlist\Helper\Data::class);
+$urlHelper = $this->helper(\BrunoDuarte\MultipleWishlist\Helper\Url::class);
 ?>
 
 <h1 class="page-title" style="margin-top:1.5rem;">
@@ -13,17 +15,21 @@ $wishlistItems = $viewModel->getWishlistItems();
 </h1>
 
 <?php if (empty($wishlistItems)): ?>
-    <p class="empty">Wishlist is empty.</p>
+    <p class="empty">
+        <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
+            A lista de desejos não possui itens. Adicione produtos à sua lista de desejos para visualizá-los aqui.
+        </span>
+    </p>
 <?php endif; ?>
 
 <?php if (!empty($wishlistItems)): ?>
     <div class="multiple-wishlist-header" style="width:100%;">
         <div class="actions-btn" style="display:flex; justify-content:flex-start;margin-top:1.5rem;margin-bottom:1.5rem;">
-            <a class="" href="<?= $viewModel->getBackUrl() ?>" style="padding: .5rem 1rem; border-right: 1px solid #999;">
+            <a class="" href="<?= $escaper->escapeUrl($urlHelper->getRouteUrl('multiple_wishlist/cart/add', ['id' => $viewModel->getWishlistId()])) ?>" style="padding: .5rem 1rem; border-right: 1px solid #999;">
                 <span>Adicionar ao carrinho</span>
             </a>
 
-            <a class="" href="<?= $viewModel->getBackUrl() ?>" style="padding: .5rem 1rem">
+            <a class="" href="<?= $escaper->escapeUrl($urlHelper->getRouteUrl('multiple_wishlist/page/listing')) ?>" style="padding: .5rem 1rem">
                 <span>Voltar</span>
             </a>
         </div>
@@ -41,39 +47,35 @@ $wishlistItems = $viewModel->getWishlistItems();
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- $wishlistItems está retornando um array, quando deveria retornar um objeto. -->
-                    <?php foreach ($wishlistItems as $product): ?>
+                    <?php foreach ($wishlistItems['product'] as $product): ?>
                         <tr class="col">
                             <td class="col" width="15%">
-                                <img src="<?= $product['product']['swatch_image'] ?>" alt="<?= $product['product']['name'] ?>" style="width: 100px; height: 100px; object-fit: cover;" />
+                                <img src="<?= $escaper->escapeUrl($urlHelper->getProductImageUrl($product['_product'], $product['swatch_image'])) ?>" alt="<?= $escaper->escapeHtmlAttr($product['name']) ?>" style="width: 100px; height: 100px; object-fit: cover;" />
                             </td>
                             <td class="col" width="60%">
                                 <div class="product-item-details">
-                                    <strong class="product-item-name">
-                                        <a href="<?= $product['product']['product_url'] ?>"><?= $product['product']['name'] ?></a>
-                                    </strong>
-                                    <span class="product-item-sku">SKU: <?= $product['product']['sku'] ?></span>
+                                    <a href="<?= $escaper->escapeUrl($urlHelper->getProductUrl($product['_product'])) ?>">
+                                        <strong class="product-item-name">
+                                            <?= $escaper->escapeHtml($product['name']) ?>
+                                        </strong>
+                                    </a>
+                                    <span class="product-item-sku"><b>SKU:</b> <?= $product['sku'] ?></span>
                                 </div>
                             </td>
                             <td class="col" width="15%">
-                                <span style="font-size:14px; line-height:100px; font-weight:500; color:black;"><?= $product['product']['price'] ?></span>
+                                <span style="font-size:14px; line-height:100px; font-weight:500; color:black;"><?= $dataHelper->getPrice($product['price']) ?></span>
                             </td>
                             <td class="col" width="10%" style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
-                                <a class="action view" href="<?= $product['product']['url_remove'] ?>">Remover</a>
+                                <a href="<?= $escaper->escapeUrl($urlHelper->getRemoveFromWishlistUrl($product['_product'])) ?>">
+                                    <span class="action view">Remover</span>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
 
                     <tr class="col">
                         <td class="col" colspan="4">
-                            <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">Total de itens: <?= count($viewModel->getWishlistItems()) ?></span>
-                        </td>
-                    </tr>
-                    <tr class="col">
-                        <td class="col" colspan="4">
-                            <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">
-                                A lista de desejos não possui itens. Adicione produtos à sua lista de desejos para visualizá-los aqui.
-                            </span>
+                            <span style="font-size:14px; line-height:100px; font-weight:normal; color:#999;">Total de itens: <?= count($wishlistItems['product']) ?></span>
                         </td>
                     </tr>
                 </tbody>

@@ -10,8 +10,7 @@ declare(strict_types=1);
 namespace BrunoDuarte\MultipleWishlist\ViewModel\View;
 
 use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistRepositoryInterface;
-use BrunoDuarte\MultipleWishlist\Api\MultipleWishlistItemRepositoryInterface;
-use BrunoDuarte\MultipleWishlist\Api\Data\MultipleWishlistItemInterface;
+use BrunoDuarte\MultipleWishlist\Model\ResourceModel\MultipleWishlistItem\CollectionFactory as MultipleWishlistItemCollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -31,10 +30,7 @@ class ItemsList implements ArgumentInterface
      */
     private RequestInterface $request;
 
-    /**
-     * @var MultipleWishlistItemRepositoryInterface
-     */
-    private MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository;
+    private MultipleWishlistItemCollectionFactory $multipleWishlistItemCollectionFactory;
 
     /**
      * @var MultipleWishlistRepositoryInterface
@@ -55,20 +51,20 @@ class ItemsList implements ArgumentInterface
      * ItemsList constructor.
      *
      * @param RequestInterface $request
-     * @param MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository
+     * @param MultipleWishlistItemCollectionFactory $multipleWishlistItemCollectionFactory
      * @param MultipleWishlistRepositoryInterface $multipleWishlistRepository
      * @param ManagerInterface $messageManager
      * @param ProductFactory $productFactory
      */
     public function __construct(
         RequestInterface $request,
-        MultipleWishlistItemRepositoryInterface $multipleWishlistItemRepository,
+        MultipleWishlistItemCollectionFactory $multipleWishlistItemCollectionFactory,
         MultipleWishlistRepositoryInterface $multipleWishlistRepository,
         ManagerInterface $messageManager,
         ProductFactory $productFactory
     ) {
         $this->request = $request;
-        $this->multipleWishlistItemRepository = $multipleWishlistItemRepository;
+        $this->multipleWishlistItemCollectionFactory = $multipleWishlistItemCollectionFactory;
         $this->multipleWishlistRepository = $multipleWishlistRepository;
         $this->messageManager = $messageManager;
         $this->productFactory = $productFactory;
@@ -116,37 +112,35 @@ class ItemsList implements ArgumentInterface
     /**
      * Get wishlist the products
      *
-     * @return array|MultipleWishlistItemInterface|null
+     * @return array|null
      */
-    public function getWishlistItems()
+    public function getWishlistItems(): ?array
     {
         try {
             $this->wishlistExists();
 
-            $wishlistItems = $this->multipleWishlistItemRepository->getById($this->getWishlistId());
-            if (empty($wishlistItems)) {
-                return [];
-            }
+            $wishlistItems = $this->multipleWishlistItemCollectionFactory->create();
+            $wishlistItems->addFieldToFilter('wishlist_id', $this->getWishlistId());
 
-            $productId = (int) $wishlistItems->getProductId();
-            if (!empty($productId)) {
+            $products = [];
+            foreach ($wishlistItems as $wishlistItem) {
+                $productId = (int) $wishlistItem->getProductId();
                 $product = $this->productFactory->create()->load($productId);
                 if (!$product->getId()) {
                     throw new \InvalidArgumentException('Product not found for the wishlist item.');
                 }
-                $wishlistItems->setProduct($product->getData());
+
+                $productData = array_merge($product->getData(), $wishlistItem->getData());
+                $productData['swatch_image'] = $productData['swatch_image'] ?? $productData['image'] ?? '';
+                $productData['_product'] = $product;
+                $products[] = $productData;
             }
 
-            return $wishlistItems->getData();
-
+            return $products === [] ? [] : ['product' => $products];
         } catch (\InvalidArgumentException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return null;
         }
     }
 
-    public function getBackUrl(): string
-    {
-        return '/multiple_wishlist/page/listing/';
-    }
 }
